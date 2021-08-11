@@ -22,7 +22,7 @@ plt.rcParams["font.family"] = font
 plt.rcParams['text.color'] = textc
 
 # Data import & columns
-df=pd.read_csv('scotprem.csv')
+df=pd.read_csv('/Users/jaymesmonte/Desktop/Analytics/ScotPremData/2122AllScotPrem_prog.csv')
 df['team'] = np.where(df.teamId==df.hometeamid,df.hometeam,
                       df.awayteam)
 df['fixture']= df['hometeam'] + " v " +df["awayteam"]
@@ -39,6 +39,7 @@ df["KP"].replace({0: "No", 1: "Yes"}, inplace=True)
 df["Corner"].replace({0: "No", 1: "Yes"}, inplace=True)
 df["GK"].replace({0: "No", 1: "Yes"}, inplace=True)
 df["Final 3rd"].replace({0: "No", 1: "Yes"}, inplace=True)
+df["Cross"].replace({0: "No", 1: "Yes"}, inplace=True)
 df["progressive"].replace({False: "No", True: "Yes"}, inplace=True)
 
 values={"receiver":"Incomplete"}
@@ -49,14 +50,11 @@ df=df.fillna(value=values)
 st.sidebar.markdown('### Data Filters')
 
 teams = list(df['team'].drop_duplicates())
-teams.insert(0,"None")
+teams=sorted(teams)
 #teams.append("All")
 team_choice = st.sidebar.selectbox(
     "Select a team:", teams, index=0)
-if team_choice == "None":
-    df=df.loc[(df['team'] == "None")]
-else: 
-    df=df.loc[(df['team'] == team_choice)]
+df=df.loc[(df['team'] == team_choice)]
 
 fixtures = list(df['fixture'].drop_duplicates())
 fixtures.insert(0,"All")
@@ -69,6 +67,7 @@ else:
     df=df.loc[(df['fixture'] == fixture_choice)]
 
 players = list(df['name'].drop_duplicates())
+players=sorted(players)
 players.insert(0,"All")
 #players.append("All")
 player_choice = st.sidebar.selectbox(
@@ -79,6 +78,7 @@ else:
     df=df.loc[(df['name'] == player_choice)]
 
 recipient = list(df['receiver'].drop_duplicates())
+recipient=sorted(recipient)
 recipient.insert(0,"All")
 #recipient.append("All")
 receiver_choice = st.sidebar.selectbox(
@@ -96,6 +96,15 @@ if pass_select == "All":
     df=df
 else:
     df=df.loc[(df['progressive'] == pass_select)]
+    
+cross = list(df['Cross'].drop_duplicates())
+cross.insert(0,"All")
+cross_select = st.sidebar.radio("Cross?",cross,
+                               index=0)
+if cross_select == "All":
+    df=df
+else:
+    df=df.loc[(df['Cross'] == cross_select)]
     
 key_pass = list(df['KP'].drop_duplicates())
 key_pass.insert(0,"All")
@@ -159,4 +168,3 @@ st.title(f"Scottish Premiership - 2021/22 Season")
 st.markdown('### Pass map')
 
 st.pyplot(fig)
-
