@@ -22,7 +22,7 @@ plt.rcParams["font.family"] = font
 plt.rcParams['text.color'] = textc
 
 # Data import & columns
-df=pd.read_csv('/Users/jaymesmonte/Desktop/Analytics/ScotPremData/2122AllScotPrem_prog.csv')
+df=pd.read_csv('scotprem.csv')
 df['team'] = np.where(df.teamId==df.hometeamid,df.hometeam,
                       df.awayteam)
 df['fixture']= df['hometeam'] + " v " +df["awayteam"]
