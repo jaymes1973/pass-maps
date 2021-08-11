@@ -49,12 +49,12 @@ df=df.fillna(value=values)
 st.sidebar.markdown('### Data Filters')
 
 teams = list(df['team'].drop_duplicates())
-teams.insert(0,"All")
+teams.insert(0,"None")
 #teams.append("All")
 team_choice = st.sidebar.selectbox(
-    "Filter by Team:", teams, index=0)
-if team_choice == "All":
-    df=df
+    "Select a team:", teams, index=0)
+if team_choice == "None":
+    df=df.loc[(df['team'] == "None")]
 else: 
     df=df.loc[(df['team'] == team_choice)]
 
