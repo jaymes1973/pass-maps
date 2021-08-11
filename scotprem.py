@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from mplsoccer.pitch import VerticalPitch
+from scipy.ndimage import gaussian_filter
 
 
 textc='#1d3557'
@@ -45,6 +47,9 @@ df["progressive"].replace({False: "No", True: "Yes"}, inplace=True)
 values={"receiver":"Incomplete"}
 df=df.fillna(value=values)
 
+aynlist=["All","Yes","No"]
+
+st.set_page_config(layout='wide')
 
 # Sidebar - title & filters
 st.sidebar.markdown('### Data Filters')
@@ -88,54 +93,42 @@ if receiver_choice == "All":
 else:
     df=df.loc[(df['receiver'] == receiver_choice)]
     
-pass_type = list(df['progressive'].drop_duplicates())
-pass_type.insert(0,"All")
-pass_select = st.sidebar.radio("Progressive Pass?",pass_type,
+pass_select = st.sidebar.radio("Progressive Pass?",aynlist,
                                index=0,help="A progressive pass is defined as a pass that moves the ball 25% of the remaining distance towards goal")
 if pass_select == "All":
     df=df
 else:
-    df=df.loc[(df['progressive'] == pass_select)]
+    df=df.loc[(df['progressive'] == pass_select)& (df['Corner'] == "No")]
     
-cross = list(df['Cross'].drop_duplicates())
-cross.insert(0,"All")
-cross_select = st.sidebar.radio("Cross?",cross,
+cross_select = st.sidebar.radio("Cross?",aynlist,
                                index=0)
 if cross_select == "All":
     df=df
 else:
-    df=df.loc[(df['Cross'] == cross_select)]
+    df=df.loc[(df['Cross'] == cross_select) & (df['Corner'] == "No")]
     
-key_pass = list(df['KP'].drop_duplicates())
-key_pass.insert(0,"All")
-kpass_select = st.sidebar.radio("Key Pass?",key_pass,
+kpass_select = st.sidebar.radio("Key Pass?",aynlist,
                                index=0,help="A key pass is a pass that leads to a shot on goal")
 if kpass_select == "All":
     df=df
 else:
     df=df.loc[(df['KP'] == kpass_select)]
     
-corner_list = list(df['Corner'].drop_duplicates())
-corner_list.insert(0,"All")
-corner_select = st.sidebar.radio("Corner?",corner_list,
+corner_select = st.sidebar.radio("Corner?",aynlist,
                                index=0)
 if corner_select == "All":
     df=df
 else:
     df=df.loc[(df['Corner'] == corner_select)]
     
-gk_list = list(df['GK'].drop_duplicates())
-gk_list.insert(0,"All")
-gk_select = st.sidebar.radio("Goal Kick?",gk_list,
+gk_select = st.sidebar.radio("Goal Kick?",aynlist,
                                index=0)
 if gk_select == "All":
     df=df
 else:
     df=df.loc[(df['GK'] == gk_select)]
     
-final3_list = list(df['Final 3rd'].drop_duplicates())
-final3_list.insert(0,"All")
-final3_select = st.sidebar.radio("Pass into final 3rd?",final3_list,
+final3_select = st.sidebar.radio("Pass into final 3rd?",aynlist,
                                index=0)
 if final3_select == "All":
     df=df
@@ -146,25 +139,41 @@ else:
 pitch = VerticalPitch(half=False,pitch_type='statsbomb',
               pitch_color=bgcolor, line_color=linec,pad_top=10,line_zorder=2)
 
-fig, ax = pitch.draw(figsize=(16, 11), constrained_layout=True, tight_layout=False)
+
+fig, axs = pitch.grid(ncols=3, axis=False,figheight=12)
 
 df_S=df.loc[(df["outcomeType_displayName"] == "Successful")]
 pitch1= pitch.arrows(df_S.x, df_S.y,
                      df_S.endX, df_S.endY,
-                     color=color2,width=2, headwidth=7,alpha=1, headlength=6, ax=ax,zorder=5,lw=0.2,label="Completed passes")
+                     color=color2,width=2, headwidth=7,alpha=1, headlength=6, ax=axs['pitch'][0],zorder=5,lw=0.2,label="Completed passes")
 
 df_U=df.loc[(df["outcomeType_displayName"] == "Unsuccessful")]
 pitch1= pitch.arrows(df_U.x, df_U.y,
                      df_U.endX, df_U.endY,
-                     color=color1,width=2, headwidth=7,alpha=0.5, headlength=6, ax=ax,zorder=5,lw=0.2,label="Incomplete passes")
+                     color=color1,width=2, headwidth=7,alpha=0.5, headlength=6, ax=axs['pitch'][0],zorder=5,lw=0.2,label="Incomplete passes")
 
-ax.legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc='lower left')
+axs['pitch'][0].legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc='lower left')
+axs['pitch'][0].text(40, 125, "Filtered passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=20)
 
+bin_statistic = pitch.bin_statistic(df.x, df.y, statistic='count', bins=(50, 35))
+bin_statistic['statistic'] = gaussian_filter(bin_statistic['statistic'], 1)
+pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][1], cmap=cmap, edgecolors=bgcolor)
+axs['pitch'][1].text(40, 125, "Heatmap - Start point of passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=20)
+
+bin_statistic = pitch.bin_statistic(df.endX, df.endY, statistic='count', bins=(50, 35))
+bin_statistic['statistic'] = gaussian_filter(bin_statistic['statistic'], 1)
+pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][2], cmap=cmap, edgecolors=bgcolor)
+axs['pitch'][2].text(40, 125, "Heatmap - End point of passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=20)
 
 # Main
 st.title(f"Scottish Premiership - 2021/22 Season")
 
 # Main - dataframes
-st.markdown('### Pass map')
+#st.markdown('### Pass map')
+
+
 
 st.pyplot(fig)
