@@ -23,6 +23,10 @@ arrowedge=bgcolor
 plt.rcParams["font.family"] = font
 plt.rcParams['text.color'] = textc
 
+cmaplist = [bgcolor,color2,color1]
+cmap = LinearSegmentedColormap.from_list("", cmaplist)
+
+
 # Data import & columns
 df=pd.read_csv('scotprem.csv')
 df['team'] = np.where(df.teamId==df.hometeamid,df.hometeam,
