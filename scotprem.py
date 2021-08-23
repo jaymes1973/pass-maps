@@ -28,7 +28,7 @@ cmap = LinearSegmentedColormap.from_list("", cmaplist)
 
 
 # Data import & columns
-df=pd.read_csv('scotprem.csv')
+df=pd.read_csv('2122AllScotPrem_prog.csv')
 df['team'] = np.where(df.teamId==df.hometeamid,df.hometeam,
                       df.awayteam)
 df['fixture']= df['hometeam'] + " v " +df["awayteam"]
