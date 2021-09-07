@@ -287,7 +287,7 @@ fig_text(s=f"Penalties and Own Goals are excluded from all calculations",
         x=0.05, y =0, fontsize=20,fontfamily=font,color=textc)
 
 
-col1, col2 =st.beta_columns(2)
+col1, col2 =st.columns(2)
 
 with col1:
     st.write("Pass Maps")
