@@ -257,13 +257,13 @@ ax1.legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc
 fig1.patch.set_facecolor(bgcolor)
 
 fig_text(s=f"{team_choice} | {player} | {stype}", ha='center',
-        x=0.5, y =1.13, fontsize=28,fontfamily=font,color=textc)
+        x=0.5, y =1.2, fontsize=22,fontfamily=font,color=textc)
 
 fig_text(s=f"Total Shots: {total_shots} | Goals: {total_goals} | On Target: {on_target}", ha='center',
-        x=0.5, y =1.06, fontsize=24,fontfamily=font,color=textc)
+        x=0.5, y =1.12, fontsize=18,fontfamily=font,color=textc)
 
 fig_text(s=f"xG per Shot: {xg_per_shot} | xG on Target: {total_xgOT} | On Target: {on_target_per} %", ha='center',
-        x=0.5, y =1.0, fontsize=24,fontfamily=font,color=textc)
+        x=0.5, y =1.06, fontsize=18,fontfamily=font,color=textc)
 
 
 #fig_text(s=f"Penalties are excluded.",#ha='center',
