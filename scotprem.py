@@ -31,7 +31,7 @@ plt.rcParams['text.color'] = textc
 st.set_page_config(layout='wide')
 
 # Data import & columns
-file1='/Users/jaymesmonte/Desktop/Analytics/ScotPremData/2122AllScotPrem_prog.csv'
+file1='2122AllScotPrem_prog.csv'
 file2='/Users/jaymesmonte/Desktop/Analytics/ScotPremData/fotmob_scraper/output_files/06-September-2021 16_14_04 xg_events.csv'
 
 df1=pd.read_csv(file2)
