@@ -220,7 +220,7 @@ on_target_per=round(on_target/total_shots*100,2)
 pitchG = VerticalPitch(half=True,pitch_type='statsbomb',
               pitch_color=bgcolor, line_color=linec,line_zorder=1,pad_top=0)
 
-fig1, ax1 = pitchG.draw(figsize=(12, 10))
+fig1, ax1 = pitchG.draw(figsize=(8, 6))
 
 # plot goal shots with a color
 sc1 = pitchG.scatter(goals.event_x, goals.event_y,
