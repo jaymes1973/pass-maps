@@ -140,37 +140,55 @@ else:
 
 #plot
 pitch = VerticalPitch(half=False,pitch_type='statsbomb',
-              pitch_color=bgcolor, line_color=linec,pad_top=10,line_zorder=2)
+              pitch_color=bgcolor, line_color=linec,line_zorder=2)
 
-
-fig, axs = pitch.grid(ncols=3, axis=False,figheight=12)
+fig, axs = pitch.grid(ncols=2, nrows=2, axis=False,figheight=12, grid_height=0.95,
+                      title_height=0, endnote_height=0)#
+fig.patch.set_facecolor(bgcolor)
 
 df_S=df.loc[(df["outcomeType_displayName"] == "Successful")]
 pitch1= pitch.arrows(df_S.x, df_S.y,
                      df_S.endX, df_S.endY,
-                     color=color2,width=2, headwidth=7,alpha=1, headlength=6, ax=axs['pitch'][0],zorder=5,lw=0.2,label="Completed passes")
+                     color=color2,width=2, headwidth=7,alpha=1, headlength=6, ax=axs['pitch'][1,0],zorder=5,lw=0.2,label="Completed passes")
 
 df_U=df.loc[(df["outcomeType_displayName"] == "Unsuccessful")]
 pitch1= pitch.arrows(df_U.x, df_U.y,
                      df_U.endX, df_U.endY,
-                     color=color1,width=2, headwidth=7,alpha=0.5, headlength=6, ax=axs['pitch'][0],zorder=5,lw=0.2,label="Incomplete passes")
+                     color=color1,width=2, headwidth=7,alpha=0.5, headlength=6, ax=axs['pitch'][1,0],zorder=5,lw=0.2,label="Incomplete passes")
 
-axs['pitch'][0].legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc='lower left')
-axs['pitch'][0].text(40, 125, "Filtered passes", color=textc,
-                  va='center', ha='center', font=font, fontsize=20)
+axs['pitch'][1,0].legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=8, loc='lower left')
+axs['pitch'][1,0].text(40, 125, "Filtered passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=12)
 
 bin_statistic = pitch.bin_statistic(df.x, df.y, statistic='count', bins=(50, 35))
 bin_statistic['statistic'] = gaussian_filter(bin_statistic['statistic'], 1)
-pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][1], cmap=cmap, edgecolors=bgcolor)
-axs['pitch'][1].text(40, 125, "Heatmap - Start point of passes", color=textc,
-                  va='center', ha='center', font=font, fontsize=20)
+pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][0,0], cmap=cmap, edgecolors=bgcolor)
+axs['pitch'][0,0].text(40, 125, "Heatmap - Start point of passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=12)
 
 bin_statistic = pitch.bin_statistic(df.endX, df.endY, statistic='count', bins=(50, 35))
 bin_statistic['statistic'] = gaussian_filter(bin_statistic['statistic'], 1)
-pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][2], cmap=cmap, edgecolors=bgcolor)
-axs['pitch'][2].text(40, 125, "Heatmap - End point of passes", color=textc,
-                  va='center', ha='center', font=font, fontsize=20)
+pcm = pitch.heatmap(bin_statistic, ax=axs['pitch'][0,1], cmap=cmap, edgecolors=bgcolor)
+axs['pitch'][0,1].text(40, 125, "Heatmap - End point of passes", color=textc,
+                  va='center', ha='center', font=font, fontsize=12)
 
+for ax in axs['pitch'][-1, 1:]:
+    ax.remove()
+
+
+#total_xgOT=round(total_xgOT,2)
+total_passes=len(df)
+total_suc=len(df_S)
+#on_target=len(goals)+len(shots)
+
+pass_suc=round(total_suc/total_passes*100,2)
+#on_target_per=round(on_target/total_shots*100,2)
+    
+fig_text(s=f"{team_choice} | {player_choice} | {pass_type}", ha='center',
+        x=0.5, y =1.1, fontsize=22,fontfamily=font,color=textc)
+
+fig_text(s=f"Total Passes: {total_passes} | Successful: {total_suc} ({pass_suc} %)", ha='center',
+        x=0.5, y =1.06, fontsize=18,fontfamily=font,color=textc)
 
 st.sidebar.markdown('### Shot Map Filters')
 
@@ -252,24 +270,28 @@ sc3 = pitchG.scatter(misses.event_x, misses.event_y,
                     marker='s',
                     ax=ax1,label="Missed Target",zorder=2)
 
-ax1.legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc='lower left')    
+ax1.legend(facecolor=bgcolor, handlelength=4, edgecolor='None', fontsize=14, loc='lower right')    
 
 fig1.patch.set_facecolor(bgcolor)
 
 fig_text(s=f"{team_choice} | {player} | {stype}", ha='center',
-        x=0.5, y =1.13, fontsize=22,fontfamily=font,color=textc)
+        x=0.5, y =1.13, fontsize=28,fontfamily=font,color=textc)
 
 fig_text(s=f"Total Shots: {total_shots} | Goals: {total_goals} | On Target: {on_target}", ha='center',
-        x=0.5, y =1.06, fontsize=18,fontfamily=font,color=textc)
+        x=0.5, y =1.06, fontsize=24,fontfamily=font,color=textc)
 
 fig_text(s=f"xG per Shot: {xg_per_shot} | xG on Target: {total_xgOT} | On Target: {on_target_per} %", ha='center',
-        x=0.5, y =1.0, fontsize=18,fontfamily=font,color=textc)
+        x=0.5, y =1.0, fontsize=24,fontfamily=font,color=textc)
+
+fig_text(s=f"Penalties and Own Goals are excluded from all calculations",
+        x=0.05, y =0, fontsize=20,fontfamily=font,color=textc)
 
 
-#fig_text(s=f"Penalties are excluded.",#ha='center',
-  #      x=0.15, y =0.76, fontsize=16,fontfamily=font,color=textc)
-#
-st.pyplot(fig)
+col1, col2 =st.beta_columns(2)
 
-st.pyplot(fig1)
-
+with col1:
+    st.write("Pass Maps")
+    st.pyplot(fig)
+with col2:
+    st.write("Shot Maps")
+    st.pyplot(fig1)
