@@ -283,8 +283,8 @@ fig_text(s=f"Total Shots: {total_shots} | Goals: {total_goals} | On Target: {on_
 fig_text(s=f"xG per Shot: {xg_per_shot} | xG on Target: {total_xgOT} | On Target: {on_target_per} %", ha='center',
         x=0.5, y =1.0, fontsize=24,fontfamily=font,color=textc)
 
-fig_text(s=f"Penalties and Own Goals are excluded from all calculations",
-        x=0.05, y =0, fontsize=20,fontfamily=font,color=textc)
+fig_text(s=f"Size of marker represents xG value of shot (larger marker = greater xG)\nPenalties and Own Goals are excluded from all calculations",
+        x=0.04, y =0, fontsize=18,fontfamily=font,color=textc)
 
 
 col1, col2 =st.columns(2)
