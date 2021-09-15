@@ -32,7 +32,7 @@ st.set_page_config(layout='wide')
 
 # Data import & columns
 file1='2122AllScotPrem_prog.csv'
-file2='06-September-2021 16_14_04 xg_events.csv'
+file2='15-September-2021 11_43_37 xg_events.csv'
 
 df1=pd.read_csv(file2)
 df1['event_x'] = df1['event_x']*1.149
