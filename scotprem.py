@@ -222,7 +222,7 @@ else:
 
 goals=df1.loc[(df1['event_eventType'] == 'Goal')]
 shots=df1.loc[(df1['event_eventType'] == 'AttemptSaved')]
-misses=df1.loc[(df1['event_eventType'] == 'Miss')]
+misses=df1.loc[(df1['event_eventType'] == 'Miss')|(df1['event_eventType'] == 'Post')]
 
 total_xg=df1["event_expectedGoals"].sum()
 total_xgOT=df1["event_expectedGoalsOnTarget"].sum()
