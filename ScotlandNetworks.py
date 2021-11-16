@@ -193,7 +193,7 @@ pitch = VerticalPitch(half=False,pitch_type='statsbomb',
               pitch_color=bgcolor, line_color=linec,line_zorder=1,pad_top=5)
 
 ax1 = fig.add_subplot(gs[0,0])
-ax1.set_title(label=f"{team}",x=0.5,y=1.0,size=22,color=textc,ha='center')
+ax1.set_title(label=f"{team}",x=0.5,y=1.0,size=22,color=textc,ha='center',fontweight="bold")
 pitch.draw(ax=ax1)
 
 pass_lines = pitch.lines(passes_between.x, passes_between.y,
@@ -209,7 +209,7 @@ for index, row in average_locs_and_count.iterrows():
                    ha='center', size=12, weight='bold', ax=ax1)
     
 ax2 = fig.add_subplot(gs[1,0])
-ax2.set_title(label=f"{opposition}",x=0.5,y=1.0,size=22,color=textc,ha='center')
+ax2.set_title(label=f"{opposition}",x=0.5,y=1.0,size=22,color=textc,ha='center',fontweight="bold")
 pitch.draw(ax=ax2)
 
 pass_lines = pitch.lines(passes_betweenO.x, passes_betweenO.y,
@@ -276,12 +276,17 @@ for cell in table._cells:
 
 ax4.axis('off')
 
-
-fig_text(s=f"Passing Networks | Average Position\n\n{game}",# ha='center',
+fig_text(s=f"Passing Networks | Average Position | {game}",# ha='center',
         x=0.05, y =1.13, fontsize=30,fontfamily=font,color=textc)
 
 fig_text(s=f"{min_low}min to {min_high}min (Default is set to time of first substitution in game.)",
-        x=0.05, y =1.06, fontsize=22,fontfamily=font,color=textc)
+        x=0.05, y =1.1, fontsize=22,fontfamily=font,color=textc)
+
+fig_text(s=f"Size of node represents number of passes completed relative to teammates.",
+        x=0.05, y =1.06, fontsize=16,fontfamily=font,color=textc)
+
+fig_text(s=f"Thicker connecting line indicates more passes between players.",
+        x=0.05, y =1.04, fontsize=16,fontfamily=font,color=textc)
 
 
 st.pyplot(fig)
