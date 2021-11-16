@@ -1,5 +1,5 @@
-file1="/Users/jaymesmonte/Desktop/Analytics/Data/WorldCup22/WCQs_prog.csv"
-image1="/Users/jaymesmonte/Desktop/Analytics/Dufc_Analytics/scotland.png"
+file1="WCQs_prog.csv"
+image1="scotland.png"
 
 textc='#1d3557'
 linec='#808080'
