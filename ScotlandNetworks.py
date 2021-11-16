@@ -1,3 +1,13 @@
+import pandas as pd
+import numpy as np
+import streamlit as st
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+from mplsoccer.pitch import VerticalPitch
+from scipy.ndimage import gaussian_filter
+from highlight_text import ax_text, fig_text
+
+
 file1="WCQs_prog.csv"
 image1="scotland.png"
 
