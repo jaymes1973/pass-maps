@@ -79,7 +79,7 @@ SubOne = SubTimes.min()
 SubTwo = SubTimes.nlargest(2).iloc[-1]
 SubLast = SubTimes.max()
 
-ft_min= df["expandedMinute"].max()#.tolist()
+ft_min= int(df["expandedMinute"].max()#.tolist())
 sub1_min=int(round(SubOne/60,0)) 
 
 min_low=0
